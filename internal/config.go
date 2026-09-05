@@ -22,7 +22,7 @@ func LoadConfig(filename string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer func() { _ = file.Close() }()
+	defer file.Close()
 
 	decoder := json.NewDecoder(file)
 	config := &Config{}
