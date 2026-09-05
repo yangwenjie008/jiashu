@@ -1,3 +1,4 @@
+// Package main is the entry point for the jiashu application.
 package main
 
 import (
@@ -7,7 +8,7 @@ import (
 
 func main() {
 	fmt.Println("jiashu - Go Mobile Application")
-	
+
 	// TODO: Initialize application
 	if err := run(); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Error: %v\n", err)

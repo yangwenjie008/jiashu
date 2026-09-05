@@ -4,24 +4,25 @@ package config
 import (
 	"encoding/json"
 	"os"
+	"path/filepath"
 )
 
 // Config represents the application configuration.
 type Config struct {
-	AppName    string `json:"app_name"`
-	Version    string `json:"version"`
-	Debug      bool   `json:"debug"`
-	Port       int    `json:"port"`
+	AppName     string `json:"app_name"`
+	Version     string `json:"version"`
+	Debug       bool   `json:"debug"`
+	Port        int    `json:"port"`
 	DatabaseURL string `json:"database_url"`
 }
 
 // LoadConfig loads configuration from a file.
 func LoadConfig(filename string) (*Config, error) {
-	file, err := os.Open(filename)
+	file, err := os.Open(filepath.Clean(filename))
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	decoder := json.NewDecoder(file)
 	config := &Config{}
