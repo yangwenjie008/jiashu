@@ -103,4 +103,4 @@ output:
   sort-order:
     - file
     - linter
-    - line
+    - severity
