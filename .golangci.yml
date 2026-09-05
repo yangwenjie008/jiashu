@@ -1,24 +1,23 @@
+version: "2"
+
 run:
   timeout: 5m
   modules-download-mode: readonly
 
 linters:
-  disable-all: true
+  default: none
   enable:
     - bodyclose
     - contextcheck
     - errcheck
     - errorlint
     - exhaustive
-    - exportloopref
     - funlen
     - goconst
     - gocritic
     - gocyclo
     - godot
-    - goimports
     - gosec
-    - gosimple
     - govet
     - ineffassign
     - misspell
@@ -29,66 +28,70 @@ linters:
     - prealloc
     - revive
     - staticcheck
-    - stylecheck
     - typecheck
     - unconvert
     - unparam
     - unused
     - whitespace
-
-linters-settings:
-  errcheck:
-    check-blank: true
-    exclude-functions:
-      - (io.Closer).Close
-      - (net.Listener).Close
-      - (net.Conn).Close
-      - (os.File).Close
-  govet:
-    enable-all: true
-    disable:
-      - fieldalignment
-  revive:
+  settings:
+    errcheck:
+      check-blank: true
+      exclude-functions:
+        - (io.Closer).Close
+        - (net.Listener).Close
+        - (net.Conn).Close
+        - (os.File).Close
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment
+    revive:
+      rules:
+        - name: blank-imports
+        - name: context-as-argument
+        - name: dot-imports
+        - name: error-return
+        - name: error-strings
+        - name: error-naming
+        - name: exported
+          arguments:
+            - "disableStutteringCheck"
+            - "sayRepetitiveInsteadOfStutters"
+        - name: increment-decrement
+        - name: var-naming
+        - name: package-comments
+          arguments:
+            - "style"
+        - name: range
+        - name: receiver-naming
+        - name: time-naming
+        - name: unexported-return
+        - name: indent-error-flow
+        - name: errorf
+        - name: empty-block
+        - name: superfluous-else
+        - name: unused-parameter
+        - name: unreachable-code
+        - name: redefines-builtin-id
+  exclusions:
+    generated: lax
     rules:
-      - name: blank-imports
-      - name: context-as-argument
-      - name: dot-imports
-      - name: error-return
-      - name: error-strings
-      - name: error-naming
-      - name: exported
-        arguments:
-          - "disableStutteringCheck"
-          - "sayRepetitiveInsteadOfStutters"
-      - name: increment-decrement
-      - name: var-naming
-      - name: package-comments
-        arguments:
-          - "style"
-      - name: range
-      - name: receiver-naming
-      - name: time-naming
-      - name: unexported-return
-      - name: indent-error-flow
-      - name: errorf
-      - name: empty-block
-      - name: superfluous-else
-      - name: unused-parameter
-      - name: unreachable-code
-      - name: redefines-builtin-id
+      - path: _test\.go
+        linters:
+          - funlen
+          - gocyclo
+          - gosec
+
+formatters:
+  enable:
+    - goimports
 
 issues:
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - funlen
-        - gocyclo
-        - gosec
   max-issues-per-linter: 50
   max-same-issues: 3
 
 severity:
-  default-severity: error
+  default: error
   rules:
     - linters:
         - govet
@@ -98,7 +101,6 @@ severity:
       severity: warning
 
 output:
-  sort-results: true
   sort-order:
     - file
     - linter
